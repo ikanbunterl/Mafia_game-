@@ -1,0 +1,18 @@
+{
+  "gameName": "Mafia: City of Shadows",
+  "version": "1.7.0",
+  "minPlayers": 4,
+  "maxPlayers": 12,
+  "defaultPlayers": 6,
+  "roleDistribution": {
+    "4":  { "mafia": 1, "detective": 1, "doctor": 1, "citizen": 1 },
+    "5":  { "mafia": 1, "detective": 1, "doctor": 1, "jester": 1, "citizen": 1 },
+    "6":  { "mafia": 1, "detective": 1, "doctor": 1, "mayor": 1, "jester": 1, "citizen": 1 },
+    "7":  { "mafia": 2, "detective": 1, "doctor": 1, "serial_killer": 1, "jester": 1, "citizen": 1 },
+    "8":  { "mafia": 2, "frame_artist": 1, "detective": 1, "doctor": 1, "vigilante": 1, "jester": 1, "citizen": 1 },
+    "9":  { "mafia": 2, "frame_artist": 1, "detective": 1, "doctor": 1, "vigilante": 1, "mayor": 1, "jester": 1, "citizen": 1 },
+    "10": { "mafia": 3, "detective": 1, "doctor": 1, "serial_killer": 1, "vigilante": 1, "mayor": 1, "jester": 1, "amnesiac": 1, "citizen": 1 },
+    "11": { "mafia": 3, "frame_artist": 1, "detective": 1, "doctor": 1, "serial_killer": 1, "vigilante": 1, "mayor": 1, "jester": 1, "amnesiac": 1, "citizen": 1 },
+    "12": { "mafia": 3, "frame_artist": 1, "detective": 1, "doctor": 1, "serial_killer": 1, "vigilante": 1, "mayor": 1, "bodyguard": 1, "jester": 1, "amnesiac": 1, "citizen": 1 }
+  }
+}

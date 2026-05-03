@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mafia: City of Shadows</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- City Background -->
+    <div class="city-background">
+        <div class="sky-gradient" id="skyGradient"></div>
+        <div id="starsContainer" class="stars-container"></div>
+        <div class="moon"></div>
+        <div class="sun" id="sun"></div>
+        <div id="weatherContainer" class="weather-container"></div>
+        <div class="skyline" id="bgSkyline"></div>
+        <div class="neon-signs" id="neonSigns"></div>
+        <div class="ground"></div>
+    </div>
+
+    <div id="focusOverlay" class="focus-overlay"></div>
+    <div id="roleAura" class="role-aura"></div>
+    <div id="phaseFlash" class="phase-flash"></div>
+    <div id="eventBanner" class="event-banner"></div>
+
+    <!-- Tutorial Overlay -->
+    <div id="tutorialOverlay" class="tutorial-overlay" style="display:none;">
+        <div class="tutorial-card glass-panel">
+            <h3 id="tutorialTitle">🌃 Selamat Datang!</h3>
+            <p id="tutorialDesc">Klik gedung untuk memilih target aksi atau voting. Gunakan Log untuk melihat riwayat kejadian.</p>
+            <button id="tutorialNext" class="btn btn-primary">Mengerti!</button>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="mainMenu" class="main-menu">
+        <div class="menu-card glass-panel">
+            <div class="game-logo">
+                <span class="logo-icon">🏙️</span>
+                <h1 class="game-title">MAFIA</h1>
+                <p class="game-subtitle">City of Shadows</p>
+            </div>
+            <div class="menu-divider"></div>
+            <div class="menu-buttons">
+                <button id="btnPlay" class="btn btn-primary"><span class="btn-icon">▶</span> Mulai Permainan</button>
+                <button id="btnUpdateLog" class="btn btn-secondary"><span class="btn-icon">📋</span> Update Log</button>
+                <button id="btnSettings" class="btn btn-secondary"><span class="btn-icon">⚙️</span> Settings</button>
+            </div>
+            <div class="version-text">v1.7.0</div>
+        </div>
+    </div>
+
+    <!-- Player Count Modal -->
+    <div id="playerCountModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h2>🏙️ Pilih Jumlah Pemain</h2>
+                <p>Kamu + berapa bot?</p>
+            </div>
+            <div class="modal-body">
+                <div class="player-count-selector">
+                    <label>Total Pemain (termasuk kamu):</label>
+                    <div class="count-display">
+                        <button id="countMinus" class="count-btn">−</button>
+                        <span id="countNumber" class="count-number">6</span>
+                        <button id="countPlus" class="count-btn">+</button>
+                    </div>
+                    <input type="range" id="totalPlayersRange" min="4" max="12" value="6">
+                    <div class="role-preview" id="rolePreview"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelPlay" class="btn btn-cancel">Batal</button>
+                <button id="btnStartGame" class="btn btn-primary">Mulai Game</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Log Modal -->
+    <div id="updateLogModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card modal-wide glass-panel">
+            <div class="modal-header"><h2>📋 Update Log</h2></div>
+            <div class="modal-body update-log-body"><div id="updateLogContent"></div></div>
+            <div class="modal-footer"><button id="btnCloseUpdateLog" class="btn btn-cancel">Tutup</button></div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card modal-wide glass-panel">
+            <div class="modal-header"><h2>⚙️ Settings</h2></div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <h3>📊 Statistik</h3>
+                    <div class="stat-display">
+                        <div class="stat-item"><span class="stat-num" id="statWins">0</span><span class="stat-label">Menang</span></div>
+                        <div class="stat-item"><span class="stat-num" id="statLosses">0</span><span class="stat-label">Kalah</span></div>
+                        <div class="stat-item"><span class="stat-num" id="statTotal">0</span><span class="stat-label">Total</span></div>
+                    </div>
+                    <button id="btnGenerateCode" class="btn btn-sm btn-secondary">🔑 Generate Kode Recovery</button>
+                    <div id="codeDisplay" class="code-display" style="display:none;">
+                        <p style="font-size:0.8em;color:#777;">Kode recovery kamu:</p>
+                        <code id="recoveryCode"></code>
+                        <button id="btnCopyCode" class="btn-copy">📋 Salin</button>
+                    </div>
+                    <div style="margin-top:10px;">
+                        <input type="text" id="restoreCodeInput" class="text-input" placeholder="Paste kode untuk restore...">
+                        <button id="btnRestoreData" class="btn btn-sm btn-secondary">🔄 Restore Data</button>
+                        <p id="restoreStatus" class="restore-status"></p>
+                    </div>
+                    <button id="btnResetData" class="btn btn-sm btn-danger" style="margin-top:10px;">🗑️ Reset Semua Data</button>
+                </div>
+                <div class="setting-group">
+                    <h3>🎨 Tampilan</h3>
+                    <label class="toggle-label"><input type="checkbox" id="toggleAnimations" checked> Animasi & Efek Visual</label>
+                </div>
+            </div>
+            <div class="modal-footer"><button id="btnCloseSettings" class="btn btn-cancel">Tutup</button></div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer" class="game-container" style="display:none;">
+        <!-- Status Bar -->
+        <div class="status-bar glass-panel">
+            <span id="statusDay">Hari ke-1</span>
+            <span class="status-sep">|</span>
+            <span id="statusPhase">🌙 Malam</span>
+            <span class="status-sep">|</span>
+            <span id="statusAlive">Hidup: 6</span>
+            <button id="toggleLog" class="btn btn-sm btn-secondary">📜 Log</button>
+            <button id="btnQuitGame" class="btn btn-sm btn-danger">🏠 Keluar</button>
+        </div>
+
+        <!-- Your Role -->
+        <div class="your-role glass-panel" id="yourRolePanel">
+            <div class="role-icon" id="yourRoleIcon">👤</div>
+            <div>
+                <div class="role-name" id="yourRoleName">Warga</div>
+                <div class="role-desc" id="yourRoleDesc">Bantu temukan mafia!</div>
+            </div>
+        </div>
+
+        <!-- Buildings Grid -->
+        <div id="buildingsGrid" class="buildings-grid"></div>
+
+        <!-- Action Panel -->
+        <div id="actionPanel" class="action-panel glass-panel" style="display:none;">
+            <h3 id="actionTitle">Pilih Aksi</h3>
+            <p id="actionInstruction" class="action-instruction">...</p>
+            <div id="actionButtons" class="action-buttons"></div>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+                <button id="btnConfirmAction" class="btn btn-primary" style="display:none;">✅ Konfirmasi</button>
+                <button id="btnSkipAction" class="btn btn-cancel">⏭ Lewati</button>
+            </div>
+        </div>
+
+        <!-- Night Result -->
+        <div id="nightResult" class="night-result glass-panel" style="display:none;">
+            <div id="resultCard"></div>
+            <button id="btnContinueToDay" class="btn btn-primary">☀️ Lanjut ke Siang</button>
+        </div>
+
+        <!-- Voting Panel -->
+        <div id="votingPanel" class="voting-panel glass-panel" style="display:none;">
+            <h3>🗳️ Fase Voting</h3>
+            <p class="action-instruction" id="votingInstruction">Pilih siapa yang ingin kamu eliminasikan:</p>
+            <div id="voteButtons" class="vote-buttons"></div>
+            <button id="btnConfirmVote" class="btn btn-primary" disabled>✅ Konfirmasi Vote</button>
+        </div>
+
+        <!-- Log Panel -->
+        <div id="logPanel" class="log-panel glass-panel" style="display:none;">
+            <div class="log-header">
+                <h4>📜 LOG AKTIVITAS</h4>
+                <div class="log-filters">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="night">Malam</button>
+                    <button class="filter-btn" data-filter="vote">Voting</button>
+                    <button class="filter-btn" data-filter="kill">Kematian</button>
+                </div>
+            </div>
+            <div id="logEntries" class="log-entries"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="modal-overlay" style="display:none;">
+        <div class="modal-card glass-panel">
+            <div class="modal-header"><h2 id="gameOverTitle">Game Over</h2></div>
+            <div class="modal-body" id="gameOverBody"></div>
+            <div class="modal-footer">
+                <button id="btnPlayAgain" class="btn btn-primary">🔄 Main Lagi</button>
+                <button id="btnBackToMenu" class="btn btn-cancel">🏠 Menu Utama</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
